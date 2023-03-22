@@ -16,7 +16,7 @@ import model.dao.SellerDao;
 import model.entities.Department;
 import model.entities.Seller;
 
-public class SellerDaoJDBC implements SellerDao{
+public class SellerDaoJDBC implements SellerDao {
 	
 	private Connection conn;
 	
@@ -92,8 +92,20 @@ public class SellerDaoJDBC implements SellerDao{
 	}
 
 	@Override
-	public void deleteById(Seller id) {
-		
+	public void deleteById(Integer id) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("DELETE FROM seller WHERE Id = ?");
+			
+			st.setInt(1, id);
+			st.executeUpdate();
+		}
+		catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+		}
 	}
 
 	@Override
